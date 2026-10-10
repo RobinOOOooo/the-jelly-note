@@ -6,10 +6,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫧</text></svg>">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <style>
+    .site-stats {
+      position: fixed;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      z-index: 10;
+      text-align: center;
+      font-size: 12px;
+      color: #999;
+      pointer-events: none;
+    }
+    .site-stats span { margin: 0 8px; }
+    #busuanzi_container_site_uv, #busuanzi_container_site_pv { display: none; }
+  </style>
   <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github@1.0.3/index.js"></script>
 </head>
 <body>
   <div id="app">加载中……</div>
+  <footer class="site-stats">
+    <span id="busuanzi_container_site_uv">本站总访客数：<em id="busuanzi_value_site_uv"></em></span>
+    <span id="busuanzi_container_site_pv">总访问量：<em id="busuanzi_value_site_pv"></em></span>
+  </footer>
   <script>
     window.$docsify = {
       name: '🫧 果冻记',
@@ -69,5 +88,6 @@
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-back-to-top@0.0.1/dist/docsify-back-to-top.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-tabs@1.6.3/dist/docsify-tabs.min.js"></script>
+  <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
