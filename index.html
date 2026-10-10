@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫧</text></svg>">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github@1.0.3/index.js"></script>
 </head>
 <body>
   <div id="app">加载中……</div>
@@ -47,7 +48,17 @@
         buttonText: '复制',
         errorText: '复制失败',
         successText: '已复制'
-      }
+      },
+      tabs: {
+        theme: 'material'
+      },
+      plugins: [
+        EditOnGithubPlugin.create(
+          'https://github.com/RobinOOOooo/the-jelly-note/blob/main/',
+          null,
+          '在 GitHub 上编辑'
+        )
+      ]
     };
   </script>
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
@@ -57,5 +68,6 @@
   <script src="//cdn.jsdelivr.net/npm/docsify-count/dist/countable.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-back-to-top@0.0.1/dist/docsify-back-to-top.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/docsify-tabs@1.6.3/dist/docsify-tabs.min.js"></script>
 </body>
 </html>
