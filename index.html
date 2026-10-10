@@ -20,6 +20,7 @@
     }
     .site-stats span { margin: 0 8px; }
     #busuanzi_container_site_uv, #busuanzi_container_site_pv { display: none; }
+    #giscus-container { margin-top: 2rem; }
   </style>
   <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github@1.0.3/index.js"></script>
 </head>
@@ -76,7 +77,37 @@
           'https://github.com/RobinOOOooo/the-jelly-note/blob/main/',
           null,
           '在 GitHub 上编辑'
-        )
+        ),
+        function (hook, vm) {
+          hook.afterEach(function (html) {
+            return html + '<div id="giscus-container"></div>';
+          });
+          hook.doneEach(function () {
+            var container = document.getElementById('giscus-container');
+            if (!container) return;
+            var term = vm.route.path;
+            if (container.getAttribute('data-loaded-term') === term) return;
+            container.setAttribute('data-loaded-term', term);
+            container.innerHTML = '';
+            var script = document.createElement('script');
+            script.src = 'https://giscus.app/client.js';
+            script.setAttribute('data-repo', 'RobinOOOooo/the-jelly-note');
+            script.setAttribute('data-repo-id', 'R_kgDOVCPfIA');
+            script.setAttribute('data-category', 'Announcements');
+            script.setAttribute('data-category-id', 'DIC_kwDOVCPfIM4DHd6y');
+            script.setAttribute('data-mapping', 'specific');
+            script.setAttribute('data-term', term);
+            script.setAttribute('data-strict', '0');
+            script.setAttribute('data-reactions-enabled', '1');
+            script.setAttribute('data-emit-metadata', '0');
+            script.setAttribute('data-input-position', 'bottom');
+            script.setAttribute('data-theme', 'preferred_color_scheme');
+            script.setAttribute('data-lang', 'zh-CN');
+            script.crossOrigin = 'anonymous';
+            script.async = true;
+            container.appendChild(script);
+          });
+        }
       ]
     };
   </script>
