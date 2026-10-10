@@ -7,29 +7,57 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫧</text></svg>">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <style>
-    .site-stats {
-      position: fixed;
-      bottom: 8px;
-      left: 0;
-      right: 0;
-      z-index: 10;
-      text-align: center;
-      font-size: 12px;
-      color: #999;
-      pointer-events: none;
-    }
-    .site-stats span { margin: 0 8px; }
-    #busuanzi_container_site_uv, #busuanzi_container_site_pv { display: none; }
     #giscus-container { margin-top: 2rem; }
+    .floating-toc {
+      position: fixed;
+      top: 160px;
+      right: 16px;
+      width: 240px;
+      max-height: calc(100vh - 220px);
+      overflow-y: auto;
+      font-size: 13px;
+      line-height: 1.7;
+      display: none;
+      z-index: 50;
+      scrollbar-width: thin;
+    }
+    .floating-toc.visible { display: block; }
+    .floating-toc .toc-item {
+      display: block;
+      color: #999;
+      text-decoration: none;
+      padding: 1px 0 1px 10px;
+      border-left: 2px solid transparent;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: color .2s, border-color .2s;
+    }
+    .floating-toc .toc-l3 { padding-left: 24px; }
+    .floating-toc .toc-l4 { padding-left: 38px; font-size: 12.5px; }
+    .floating-toc .toc-l5 { padding-left: 52px; font-size: 12px; }
+    .floating-toc .toc-l6 { padding-left: 66px; font-size: 12px; }
+    .floating-toc .toc-item:hover,
+    .floating-toc .toc-item.active {
+      color: #42b983;
+    }
+    .floating-toc .toc-item.active {
+      border-left-color: #42b983;
+    }
+    @media (min-width: 1201px) {
+      .markdown-section {
+        margin-left: 40px;
+        margin-right: 280px;
+      }
+    }
+    @media (max-width: 1200px) {
+      .floating-toc { display: none !important; }
+    }
   </style>
   <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github@1.0.3/index.js"></script>
 </head>
 <body>
   <div id="app">加载中……</div>
-  <footer class="site-stats">
-    <span id="busuanzi_container_site_uv">本站总访客数：<em id="busuanzi_value_site_uv"></em></span>
-    <span id="busuanzi_container_site_pv">总访问量：<em id="busuanzi_value_site_pv"></em></span>
-  </footer>
   <script>
     window.$docsify = {
       name: '🫧 果冻记',
@@ -107,6 +135,70 @@
             script.async = true;
             container.appendChild(script);
           });
+        },
+        function (hook) {
+          var tocEl = null;
+          var headingEls = [];
+          var itemEls = [];
+          function ensureEl() {
+            if (!tocEl) {
+              tocEl = document.createElement('div');
+              tocEl.className = 'floating-toc';
+              document.body.appendChild(tocEl);
+            }
+          }
+          function build() {
+            ensureEl();
+            var headings = document.querySelectorAll(
+              '.markdown-section h2, .markdown-section h3, .markdown-section h4, .markdown-section h5, .markdown-section h6'
+            );
+            headingEls = [];
+            itemEls = [];
+            tocEl.innerHTML = '';
+            if (headings.length < 3) {
+              tocEl.classList.remove('visible');
+              return;
+            }
+            headings.forEach(function (h, i) {
+              if (!h.id) {
+                h.id = 'toc-' + i;
+              }
+              var level = parseInt(h.tagName.charAt(1), 10);
+              var a = document.createElement('a');
+              a.className = 'toc-item toc-l' + level;
+              a.href = '#' + h.id;
+              a.textContent = h.textContent;
+              a.addEventListener('click', function (e) {
+                e.preventDefault();
+                h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              });
+              tocEl.appendChild(a);
+              headingEls.push(h);
+              itemEls.push(a);
+            });
+            tocEl.classList.add('visible');
+            updateActive();
+          }
+          function updateActive() {
+            if (!headingEls.length) return;
+            var scrollY = window.scrollY || window.pageYOffset;
+            var activeIdx = 0;
+            for (var i = 0; i < headingEls.length; i++) {
+              if (headingEls[i].offsetTop - 120 <= scrollY) {
+                activeIdx = i;
+              }
+            }
+            itemEls.forEach(function (a, i) {
+              a.classList.toggle('active', i === activeIdx);
+            });
+          }
+          hook.mounted(function () {
+            ensureEl();
+            window.addEventListener('scroll', updateActive, { passive: true });
+          });
+          hook.doneEach(function () {
+            setTimeout(build, 0);
+          });
         }
       ]
     };
@@ -119,6 +211,5 @@
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-back-to-top@0.0.1/dist/docsify-back-to-top.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-tabs@1.6.3/dist/docsify-tabs.min.js"></script>
-  <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
