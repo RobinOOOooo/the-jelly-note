@@ -1,3 +1,7 @@
+
+# 2026-01
+![涂鸦](../../images/jelly-drawings/8.jpg)
+
 # 2026-09
 
 ![涂鸦](../../images/jelly-drawings/1.jpg)
