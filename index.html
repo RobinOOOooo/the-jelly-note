@@ -5,9 +5,13 @@
   <title>果冻记</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🫧</text></svg>">
+  <!-- 主题：docsify 官方 vue 主题 -->
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
   <style>
+    /* ===== Giscus 评论区容器间距 ===== */
     #giscus-container { margin-top: 2rem; }
+
+    /* ===== 悬浮 TOC（右侧文章目录，支持 h2~h6 五级标签）===== */
     .floating-toc {
       position: fixed;
       top: 160px;
@@ -33,10 +37,12 @@
       white-space: nowrap;
       transition: color .2s, border-color .2s;
     }
+    /* 各级标题缩进（h2 不缩进，h3~h6 逐级 +14px） */
     .floating-toc .toc-l3 { padding-left: 24px; }
     .floating-toc .toc-l4 { padding-left: 38px; font-size: 12.5px; }
     .floating-toc .toc-l5 { padding-left: 52px; font-size: 12px; }
     .floating-toc .toc-l6 { padding-left: 66px; font-size: 12px; }
+    /* 悬停与当前滚动位置高亮 */
     .floating-toc .toc-item:hover,
     .floating-toc .toc-item.active {
       color: #42b983;
@@ -44,76 +50,109 @@
     .floating-toc .toc-item.active {
       border-left-color: #42b983;
     }
+    /* 宽屏时给正文右侧留出 TOC 专属列，避免重叠 */
     @media (min-width: 1201px) {
       .markdown-section {
         margin-left: 40px;
         margin-right: 280px;
       }
     }
+    /* 窄屏（≤1200px）隐藏 TOC */
     @media (max-width: 1200px) {
       .floating-toc { display: none !important; }
     }
   </style>
+  <!-- Edit on GitHub：在每篇文章顶部显示「在 GitHub 上编辑」链接（脚本需在 config 之前加载） -->
   <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github@1.0.3/index.js"></script>
 </head>
 <body>
   <div id="app">加载中……</div>
   <script>
     window.$docsify = {
-      name: '🫧 果冻记',
-      relativePath: false,
-      repo: false,
-      loadSidebar: true,
-      loadNavbar: true,
-      subMaxLevel: 1,
-      auto2top: true,
-      coverpage: true,
-      notFoundPage: true,
+      /* ===== 基础配置 ===== */
+      name: '🫧 果冻记',           // 侧边栏顶部站点名
+      relativePath: false,          // 使用绝对路径（从仓库根目录找 md 文件）
+      repo: false,                  // 不显示右上角 GitHub 仓库角标
+      loadSidebar: true,            // 加载 _sidebar.md 作为侧边栏（子目录有 _sidebar.md 时优先用子目录的）
+      loadNavbar: true,             // 加载 _navbar.md 作为顶部导航栏
+      subMaxLevel: 1,               // 侧边栏最多自动嵌套显示到 h2 标题
+      auto2top: true,               // 切换页面时自动滚动回顶部
+      coverpage: true,              // 首页显示封面（_coverpage.md）
+      notFoundPage: true,           // 页面不存在时显示 _404.md 而非默认报错
+
+      /* ===== 回到顶部按钮 ===== */
       backTopConfig: {
-        visibilityHeight: 300
+        visibilityHeight: 300       // 页面向下滚动超过 300px 后显示按钮
       },
+
+      /* ===== 全文搜索（docsify 官方 search 插件）===== */
       search: {
-        maxAge: 86400000,
-        paths: 'auto',
-        placeholder: '搜索文章',
-        noData: '找不到结果',
-        depth: 3
+        maxAge: 86400000,           // 搜索索引缓存 24 小时
+        paths: 'auto',              // 自动索引所有页面（也可指定数组）
+        placeholder: '搜索文章',     // 搜索框占位文字
+        noData: '找不到结果',        // 无结果时提示
+        depth: 3                    // 索引标题深度到 h3
       },
+
+      /* ===== 上一篇 / 下一篇（docsify-pagination 插件）===== */
       pagination: {
         previousText: '上一篇',
         nextText: '下一篇',
-        crossChapter: false,
+        crossChapter: false,        // 不跨章节（游记和日常之间不会出现上/下一篇）
         crossChapterText: false
       },
+
+      /* ===== 字数统计与预计阅读时间（docsify-count 插件，countable.js 驱动）===== */
       count: {
-        countable: true,
+        countable: true,            // 启用字数统计
         fontsize: '0.8em',
         color: 'rgb(90, 90, 90)',
-        language: 'chinese'
+        language: 'chinese'         // 中文模式（按字符数估算，显示「X 字 | Y 分钟」）
       },
+
+      /* ===== 图片点击放大（docsify 官方 zoom-image 插件，基于 medium-zoom）===== */
       zoomImage: true,
+
+      /* ===== 代码块一键复制（docsify-copy-code 插件）===== */
       copyCode: {
         buttonText: '复制',
         errorText: '复制失败',
         successText: '已复制'
       },
+
+      /* ===== Tabs 选项卡（docsify-tabs 插件）=====
+         用法：<!-- tabs:start --> ... <!-- tabs:end -->，
+         每个 ### **标题** 对应一个选项卡 */
       tabs: {
-        theme: 'material'
+        theme: 'material'           // material 风格（带底部指示条）
       },
+
+      /* ===== 自定义插件 ===== */
       plugins: [
+        /* --- Edit on GitHub：文章顶部「在 GitHub 上编辑」链接 --- */
         EditOnGithubPlugin.create(
-          'https://github.com/RobinOOOooo/the-jelly-note/blob/main/',
-          null,
-          '在 GitHub 上编辑'
+          'https://github.com/RobinOOOooo/the-jelly-note/blob/main/',  // 仓库 blob 地址（插件自动把 /blob/ 换成 /edit/）
+          null,                   // 编辑地址基底（null = 自动推导）
+          '在 GitHub 上编辑'       // 链接文字
         ),
+
+        /* --- Giscus 评论区 ---
+           基于 GitHub Discussions，每篇文章一个讨论（按路由路径区分）。
+           mapping 用 specific + 动态 term（而非 pathname），
+           因为 docsify 是 hash 路由 SPA，pathname 始终是 /，
+           用 pathname 会导致所有页面共用同一个评论区。
+           需要在 GitHub 仓库开启 Discussions，并在 giscus.app 生成配置。 */
         function (hook, vm) {
+          // afterEach：在每篇文章 HTML 末尾追加评论区容器
           hook.afterEach(function (html) {
             return html + '<div id="giscus-container"></div>';
           });
+          // doneEach：容器渲染后注入 giscus 脚本（按当前路由设置 term）
           hook.doneEach(function () {
             var container = document.getElementById('giscus-container');
             if (!container) return;
-            var term = vm.route.path;
+            var term = vm.route.path;   // 如 /posts/travel/2026-sichuan-roadtrip
+            // 同一页面不重复加载
             if (container.getAttribute('data-loaded-term') === term) return;
             container.setAttribute('data-loaded-term', term);
             container.innerHTML = '';
@@ -123,23 +162,32 @@
             script.setAttribute('data-repo-id', 'R_kgDOVCPfIA');
             script.setAttribute('data-category', 'Announcements');
             script.setAttribute('data-category-id', 'DIC_kwDOVCPfIM4DHd6y');
-            script.setAttribute('data-mapping', 'specific');
+            script.setAttribute('data-mapping', 'specific');    // 用 term 精确匹配讨论
             script.setAttribute('data-term', term);
             script.setAttribute('data-strict', '0');
-            script.setAttribute('data-reactions-enabled', '1');
+            script.setAttribute('data-reactions-enabled', '1'); // 启用表情反应
             script.setAttribute('data-emit-metadata', '0');
-            script.setAttribute('data-input-position', 'bottom');
-            script.setAttribute('data-theme', 'preferred_color_scheme');
+            script.setAttribute('data-input-position', 'bottom'); // 评论框在评论列表下方
+            script.setAttribute('data-theme', 'preferred_color_scheme'); // 跟随系统深浅色
             script.setAttribute('data-lang', 'zh-CN');
             script.crossOrigin = 'anonymous';
             script.async = true;
             container.appendChild(script);
           });
         },
+
+        /* --- 悬浮 TOC（文章目录，自写插件，无外部依赖）---
+           扫描正文 h2~h6 生成右侧固定目录：
+           - 标题数 < 3 时自动隐藏（短文不显示）
+           - 滚动时自动高亮当前所在小节
+           - 点击目录项平滑滚动定位
+           - 宽屏（>1200px）正文右侧留出专属列，窄屏隐藏（见上方 CSS） */
         function (hook) {
-          var tocEl = null;
-          var headingEls = [];
-          var itemEls = [];
+          var tocEl = null;         // 目录容器
+          var headingEls = [];      // 对应的标题元素
+          var itemEls = [];         // 目录项元素
+
+          // 首次调用时创建目录容器并挂到 body
           function ensureEl() {
             if (!tocEl) {
               tocEl = document.createElement('div');
@@ -147,6 +195,8 @@
               document.body.appendChild(tocEl);
             }
           }
+
+          // 页面渲染完成后重建目录
           function build() {
             ensureEl();
             var headings = document.querySelectorAll(
@@ -155,17 +205,18 @@
             headingEls = [];
             itemEls = [];
             tocEl.innerHTML = '';
+            // 标题太少不显示目录
             if (headings.length < 3) {
               tocEl.classList.remove('visible');
               return;
             }
             headings.forEach(function (h, i) {
               if (!h.id) {
-                h.id = 'toc-' + i;
+                h.id = 'toc-' + i;  // docsify 通常已自动生成 id，兜底补一个
               }
               var level = parseInt(h.tagName.charAt(1), 10);
               var a = document.createElement('a');
-              a.className = 'toc-item toc-l' + level;
+              a.className = 'toc-item toc-l' + level;  // toc-l2 ~ toc-l6 控制缩进
               a.href = '#' + h.id;
               a.textContent = h.textContent;
               a.addEventListener('click', function (e) {
@@ -179,6 +230,8 @@
             tocEl.classList.add('visible');
             updateActive();
           }
+
+          // 滚动时高亮当前阅读到的小节（取最后一个已滚过的标题）
           function updateActive() {
             if (!headingEls.length) return;
             var scrollY = window.scrollY || window.pageYOffset;
@@ -192,24 +245,33 @@
               a.classList.toggle('active', i === activeIdx);
             });
           }
+
+          // 首次挂载：创建容器 + 注册滚动监听（passive 提升滚动性能）
           hook.mounted(function () {
             ensureEl();
             window.addEventListener('scroll', updateActive, { passive: true });
           });
+          // 每次页面切换后重建目录
           hook.doneEach(function () {
-            setTimeout(build, 0);
+            setTimeout(build, 0);   // 等 DOM 更新完成
           });
         }
       ]
     };
   </script>
+
+  <!-- ===== Docsify 核心 ===== -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-count/dist/countable.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-back-to-top@0.0.1/dist/docsify-back-to-top.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/docsify-tabs@1.6.3/dist/docsify-tabs.min.js"></script>
+
+  <!-- ===== 官方插件 ===== -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>       <!-- 全文搜索 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>   <!-- 图片点击放大 -->
+
+  <!-- ===== 社区插件 ===== -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>  <!-- 上一篇/下一篇 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-count/dist/countable.min.js"></script>               <!-- 字数与阅读时间统计 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>   <!-- 代码块复制按钮 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-back-to-top@0.0.1/dist/docsify-back-to-top.min.js"></script> <!-- 回到顶部 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-tabs@1.6.3/dist/docsify-tabs.min.js"></script>       <!-- Tabs 选项卡 -->
 </body>
 </html>
