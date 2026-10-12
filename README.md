@@ -17,7 +17,9 @@
 - **[自驾出游避坑指南](posts/travel/2026-tips.md)** —— 用这次四川行换来的 6 条教训。
 - **[2026-10-09 日常记录](posts/daily/2026-10-09.md)** —— 招标 demo 要两个方案，凭空捏造真的很累。
 - **[果冻的涂鸦墙](posts/daily/jelly-drawings.md)** —— 大儿子平时的涂鸦绘画，按月份持续更新。
+- **[📝 日常备忘录](posts/daily/random-notes.md)** —— 有啥记啥，想到了就写。
 - **[《菊与刀》读书笔记](posts/notes/ju-yu-dao.md)** —— 耻感文化与罪感文化，恩与义理的债务网。
+- **[笔记总结](posts/notes/summary.md)** —— 笔记内容概览，知识总结与备忘录分类。
 
 ## 关于
 
