@@ -11,19 +11,6 @@
     /* ===== Giscus 评论区容器间距 ===== */
     #giscus-container { margin-top: 2rem; }
 
-    /* ===== 不蒜子访客统计页脚（页面最底部，非悬浮） ===== */
-    .site-stats {
-      margin-top: 3rem;
-      padding: 16px 0;
-      border-top: 1px solid #eee;
-      text-align: center;
-      font-size: 12px;
-      color: #999;
-    }
-    .site-stats span { margin: 0 8px; }
-    /* JS 填充数字前先隐藏容器，避免闪一下空文字 */
-    #busuanzi_container_site_uv, #busuanzi_container_site_pv { display: none; }
-
     /* ===== 悬浮 TOC（右侧文章目录，支持 h2~h6 五级标签）===== */
     .floating-toc {
       position: fixed;
@@ -80,13 +67,6 @@
 </head>
 <body>
   <div id="app">加载中……</div>
-  <!-- 不蒜子访客统计：全站总访客(UV)与总访问量(PV) -->
-  <!-- 注意：docsify 的 .content 是 absolute 定位，body 下的静态元素排不到正文末尾，
-       所以由「页脚归位」插件在每次切页后把本元素移动到 .content 内、正文与评论区之后 -->
-  <footer class="site-stats">
-    <span id="busuanzi_container_site_uv">本站总访客数：<em id="busuanzi_value_site_uv"></em></span>
-    <span id="busuanzi_container_site_pv">总访问量：<em id="busuanzi_value_site_pv"></em></span>
-  </footer>
   <script>
     window.$docsify = {
       /* ===== 基础配置 ===== */
@@ -196,22 +176,6 @@
           });
         },
 
-        /* --- 不蒜子页脚归位 ---
-           docsify 的 .content 为 absolute 定位，页脚若留在 body 中只能排到
-           main 的盒高处，不会跟在正文后面。每次切页后把它重新插入 .content
-           末尾（正文 + Giscus 评论区之后）。
-           闭包持有元素引用：即使 docsify 重写 DOM 将其移出文档，
-           引用不丢，可再次插入，busuanzi 首次填充的数字不会丢。 */
-        function (hook) {
-          var footerEl = document.querySelector('.site-stats');
-          hook.doneEach(function () {
-            var content = document.querySelector('.content');
-            if (footerEl && content && footerEl.parentElement !== content) {
-              content.appendChild(footerEl);
-            }
-          });
-        },
-
         /* --- 悬浮 TOC（文章目录，自写插件，无外部依赖）---
            扫描正文 h2~h6 生成右侧固定目录：
            - 标题数 < 3 时自动隐藏（短文不显示）
@@ -309,8 +273,5 @@
   <script src="//cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"></script>   <!-- 代码块复制按钮 -->
   <script src="//cdn.jsdelivr.net/npm/docsify-back-to-top@0.0.1/dist/docsify-back-to-top.min.js"></script> <!-- 回到顶部 -->
   <script src="//cdn.jsdelivr.net/npm/docsify-tabs@1.6.3/dist/docsify-tabs.min.js"></script>       <!-- Tabs 选项卡 -->
-
-  <!-- 不蒜子：访客统计脚本（元素 ID 为 busuanzi_value_*，填充后容器显示为 inline） -->
-  <script src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 </body>
 </html>
