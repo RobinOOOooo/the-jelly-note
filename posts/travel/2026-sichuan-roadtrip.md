@@ -69,6 +69,8 @@
 
 因为到得早，离睡觉还早，我和果冻在公园里溜达，中间偷偷给他自助机买了个冰淇淋，他偷偷吃了，不让我告诉妈妈——那冰淇淋都不新鲜，脆皮甜筒的脆皮都不脆了。果冻逛不动了，进帐篷磕了会瓜子就睡，中途有只小青蛙跑进帐篷，小小的，吓我一跳。结果半夜又下雨，今晚没收拾，第二天早上起来外面都下湿了。
 
+![](https://picgocloud.com/m/f37e3f80-2ce5-4e9b-b7ff-103ba2bae4b3.jpg)
+大熊猫基地合影
 ![2026四川游记·第3天](../../images/2026-sichuan-roadtrip/img-133.jpg)
 ![2026四川游记·第3天](../../images/2026-sichuan-roadtrip/img-134.jpg)
 ![2026四川游记·第3天](../../images/2026-sichuan-roadtrip/img-135.jpg)
@@ -138,6 +140,7 @@
 吃饭片段（2026-10-07）：
 
 [2026-10-07-eat.mp4](../../videos/2026-sichuan-roadtrip/2026-10-07-eat.mp4 ':include :type=video controls width=100%')
+![](https://picgocloud.com/m/a3b9cdc6-e639-40d2-acf7-79a78cb19cf9.mp4)
 
 ![2026四川游记·第6天](../../images/2026-sichuan-roadtrip/img-157.jpg)
 ![2026四川游记·第6天](../../images/2026-sichuan-roadtrip/img-158.jpg)
