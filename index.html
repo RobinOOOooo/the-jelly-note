@@ -107,39 +107,6 @@
     .site-stats span { margin: 0 8px; }
     /* JS 填充数字前先隐藏容器，避免闪一下空文字 */
     #busuanzi_container_site_uv, #busuanzi_container_site_pv, #busuanzi_container_page_pv { display: none; }
-
-    /* ===== 背景音乐播放器 ===== */
-    .music-player {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      background: #fff;
-      border-radius: 50%;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      z-index: 100;
-      cursor: pointer;
-      transition: transform 0.3s;
-    }
-    .music-player.playing {
-      transform: rotate(180deg);
-    }
-    .music-player.playing .play-icon {
-      display: none;
-    }
-    .music-player .play-icon,
-    .music-player .pause-icon {
-      width: 30px;
-      height: 30px;
-      margin: 10px 0 0 15px;
-    }
-    .music-player .play-icon path,
-    .music-player .pause-icon path {
-      fill: #333;
-      width: 30px;
-      height: 30px;
-    }
   </style>
 
   <!-- 不蒜子访客统计：全站总访客(UV)与总访问量(PV)，放在 #app 外，SPA 切页不丢失 -->
@@ -148,15 +115,6 @@
     <span id="busuanzi_container_site_pv">总访问量：<em id="busuanzi_value_site_pv"></em></span>
     <span id="busuanzi_container_page_pv">本文阅读量：<em id="busuanzi_value_page_pv"></em></span>
   </footer>
-  <!-- 音乐播放器 -->
-  <div class="music-player" id="musicPlayer" onclick="toggleMusic()">
-    <svg class="play-icon" viewBox="0 0 24 24">
-      <path d="M8 5v14l11-8z"/>
-    </svg>
-    <svg class="pause-icon" viewBox="0 0 24 24">
-      <path d="M6 8h4v16H6z"/>
-    </svg>
-  </div>
   <script>
     window.$docsify = {
       /* ===== 基础配置 ===== */
@@ -381,33 +339,5 @@
 
   <!-- 不蒜子：访客统计脚本（元素 ID 为 busuanzi_value_*，填充后容器显示为 inline） -->
   <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-  <script>
-    // Background Music Player
-    const musicContainer = document.getElementById('musicPlayer');
-    const playIcon = musicContainer.querySelector('.play-icon');
-    const pauseIcon = musicContainer.querySelector('.pause-icon');
-    let isPlaying = false;
-    
-    function toggleMusic() {
-      isPlaying = !isPlaying;
-      if (isPlaying) {
-        playIcon.style.display = 'none';
-        pauseIcon.style.display = 'block';
-        // Create audio element
-        const audio = new Audio('https://www.soundhelix.com/demo mp3/AirforAir.mp3');
-        audio.loop = true;
-        audio.play().catch(() => {
-          // User interaction required - show instructions
-          alert('点击播放图标开始背景音乐');
-        });
-      } else {
-        pauseIcon.style.display = 'none';
-        playIcon.style.display = 'block';
-      }
-    }
-    
-    // Click handler
-    musicContainer.addEventListener('click', toggleMusic);
-</script>
 </body>
 </html>

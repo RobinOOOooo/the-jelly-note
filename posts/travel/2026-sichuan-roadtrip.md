@@ -137,10 +137,11 @@
 
 一路往回开，凌晨十二点多到广元陵江服务区休息睡觉，睡到第二天早上七点又出发。一路很困，中间在宁强县服务区吃了桶泡面继续开，一路喝了四瓶东鹏特饮，结果胃里最后很难受，发现东鹏特饮也不解乏，就是个甜水。最后走银昆高速、眉凤高速、连霍高速一路到西安，到家下午三点。老婆直接睡了，我和他们三个在外面玩，套了沙发垫、扫了地铺了垫子；老婆睡醒后下午买了菠菜面，晚上做饭吃了饭，我给他俩洗了澡就睡，一觉到天亮。
 
-吃饭片段（2026-10-07）：
-
 [2026-10-07-eat.mp4](../../videos/2026-sichuan-roadtrip/2026-10-07-eat.mp4 ':include :type=video controls width=100%')
-![](https://picgocloud.com/m/a3b9cdc6-e639-40d2-acf7-79a78cb19cf9.mp4)
+返程途中，宁强服务区吃饭
+
+[哥哥刚睡醒，逗哥哥](https://picgocloud.com/m/a3b9cdc6-e639-40d2-acf7-79a78cb19cf9.mp4 ':include :type=video controls width=100%')
+三星堆附近吃饭
 
 ![2026四川游记·第6天](../../images/2026-sichuan-roadtrip/img-157.jpg)
 ![2026四川游记·第6天](../../images/2026-sichuan-roadtrip/img-158.jpg)
