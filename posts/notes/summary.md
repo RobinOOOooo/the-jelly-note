@@ -21,8 +21,8 @@
 
 **使用的登录账号**
 - 1、我的github账号登录，里面部署了java服务，yabing1001@163.com的github账号
-- 2、我的github账号登录，里面部署了redis服务，robinlian1001@gmail.com的github账号
-- 3、我的谷歌邮箱登录，里面部署了pgsql数据库服务，robinlian1001@gmail.com的谷歌账号
+- 2、我的github账号登录，里面部署了pgsql服务，robinlian1001@gmail.com的github账号
+- 3、我的谷歌邮箱登录，里面部署了redis数据库服务，robinlian1001@gmail.com的谷歌账号
 
 ---
 
