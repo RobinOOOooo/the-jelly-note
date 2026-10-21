@@ -26,20 +26,12 @@
 ---
 
 ## 图床服务记录
+### picgo
+- 官网：[https://picgo.app/](https://picgo.app/)
 
-> 官网：[https://picgo.app/](https://picgo.app/)
 
-> **特点**：
-> - 客户端直传，无需手动上传
-> - 支持一键复制Markdown图片链接
-> - 支持多种存储源（又云、七牛等）
-> - 免费且开源
-
-> **使用建议**：
-> - 定期检查存储空间剩余情况
-> - 重要图片建议本地备份
-
----
+### github issues/comment
+- 用 GitHub Issue/Comment 上传图片（很多图床用这个），**不计入仓库大小**，但有单图 10MB 限制，适合 markdown 配图；
 
 ## 新闻监控
 https://app.clueark.com/app/community
