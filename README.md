@@ -25,7 +25,9 @@
 - **[笔记总结](posts/notes/summary.md)**
 
 ## 🔗 收藏的链接
-- [Markdown用法](https://www.runoob.com/markdown/md-block.html)如何使用Markdown
+- [Markdown用法](https://www.runoob.com/markdown/md-block.html) 如何使用Markdown
+- [Unicode区块](https://symbl.cc/en/unicode/blocks/) Unicode字符，表情等
+  
 
 
 ## 关于
