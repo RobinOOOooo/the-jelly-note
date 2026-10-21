@@ -146,7 +146,7 @@
       pagination: {
         previousText: '上一篇',
         nextText: '下一篇',
-        crossChapter: false,        // 不跨章节（游记和日常之间不会出现上/下一篇）
+        crossChapter: false,        // 不跨章节（不同栏目之间不出现上/下一篇跳转）
         crossChapterText: false
       },
 
@@ -199,7 +199,7 @@
           hook.doneEach(function () {
             var container = document.getElementById('giscus-container');
             if (!container) return;
-            var term = vm.route.path;   // 如 /posts/travel/2026-sichuan-roadtrip
+            var term = vm.route.path;   // 如 /posts/daily/2026-sichuan-roadtrip
             // 同一页面不重复加载
             if (container.getAttribute('data-loaded-term') === term) return;
             container.setAttribute('data-loaded-term', term);
