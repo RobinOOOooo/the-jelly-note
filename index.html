@@ -82,6 +82,113 @@
     @media (max-width: 1200px) {
       .floating-toc { display: none !important; }
     }
+
+    /* ===== 相册网格（连续图片自动排成相册，点击放大由自写 lightbox 负责）===== */
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: 10px;
+      margin: 1.4rem 0;
+    }
+    .photo-gallery img {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      border-radius: 8px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, .12);
+      cursor: zoom-in;
+      display: block;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .photo-gallery img:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, .22);
+    }
+    /* 窄屏减小列宽与高度，避免格子过小 */
+    @media (max-width: 600px) {
+      .photo-gallery { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
+      .photo-gallery img { height: 110px; }
+    }
+
+    /* ===== 图片灯箱（自写 lightbox，点击放大，contain 适配横竖屏）=====
+       高度优先适应屏幕（max-height 撑满），宽度自动；横图则宽度优先（max-width 撑满）。
+       核心：max-height/max-width + width:auto/height:auto，浏览器自动 contain 缩放，
+       不同尺寸图片各取最大可见尺寸，互不裁切、互不拉伸。 */
+    .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, .92);
+      display: none;                 /* 由 JS 切换为 flex 显示 */
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      cursor: zoom-out;
+    }
+    .lightbox-img {
+      max-width: 95vw;
+      max-height: 92vh;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      box-shadow: 0 0 40px rgba(0, 0, 0, .6);
+      border-radius: 4px;
+      cursor: default;
+      transition: transform .25s ease, max-width .25s ease, max-height .25s ease;
+      transform-origin: center center;
+    }
+    .lightbox-counter {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #fff;
+      font-size: 14px;
+      letter-spacing: .05em;
+      opacity: .85;
+    }
+    .lightbox-close {
+      position: fixed;
+      top: 14px;
+      right: 22px;
+      color: #fff;
+      font-size: 32px;
+      line-height: 1;
+      cursor: pointer;
+      opacity: .8;
+    }
+    .lightbox-close:hover { opacity: 1; }
+    .lightbox-nav {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fff;
+      font-size: 34px;
+      cursor: pointer;
+      user-select: none;
+      padding: 10px 18px;
+      opacity: .65;
+      transition: opacity .2s;
+    }
+    .lightbox-nav:hover { opacity: 1; }
+    .lightbox-prev { left: 8px; }
+    .lightbox-next { right: 8px; }
+    .lightbox-rotate {
+      position: fixed;
+      top: 16px;
+      right: 72px;
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      cursor: pointer;
+      opacity: .8;
+      z-index: 10000;
+      transition: opacity .2s, transform .3s ease;
+    }
+    .lightbox-rotate:hover { opacity: 1; transform: rotate(90deg); }
+    .lightbox-rotate svg { width: 26px; height: 26px; }
   </style>
   <!-- Edit on GitHub：在每篇文章顶部显示「在 GitHub 上编辑」链接（脚本需在 config 之前加载） -->
   <script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github@1.0.3/index.js"></script>
@@ -158,8 +265,7 @@
         language: 'chinese'         // 中文模式（按字符数估算，显示「X 字 | Y 分钟」）
       },
 
-      /* ===== 图片点击放大（docsify 官方 zoom-image 插件，基于 medium-zoom）===== */
-      zoomImage: true,
+      /* ===== 图片点击放大（自写 lightbox 插件，见 plugins 数组，无外部依赖）===== */
 
       /* ===== 代码块一键复制（docsify-copy-code 插件）===== */
       copyCode: {
@@ -318,7 +424,163 @@
           hook.doneEach(function () {
             setTimeout(build, 0);   // 等 DOM 更新完成
           });
-        }
+        },
+
+        /* --- 相册网格（自写插件，无外部依赖）---
+           把正文中「连续、纯图片」的段落自动合并成一个 .photo-gallery 网格容器，
+           形成相册效果；点击网格内图片由自写 lightbox 负责放大查看。
+           - 仅合并前后相邻的纯图片段落（段落内无文字，只含 <img>）
+           - 文字 + 配图的段落不合并，保持原样，避免误伤正文插图 */
+        function (hook) {
+          function isImageOnly(node) {
+            if (!node || node.tagName !== 'P') return false;
+            var imgs = node.querySelectorAll('img');
+            if (!imgs.length) return false;
+            var clone = node.cloneNode(true);
+            Array.prototype.forEach.call(clone.querySelectorAll('img, a'), function (el) { el.remove(); });
+            return clone.textContent.replace(/\s+/g, '').length === 0;
+          }
+          function buildGallery() {
+            var section = document.querySelector('.markdown-section');
+            if (!section) return;
+            var nodes = Array.prototype.slice.call(section.children);
+            var i = 0;
+            while (i < nodes.length) {
+              if (isImageOnly(nodes[i])) {
+                var j = i;
+                while (j + 1 < nodes.length && isImageOnly(nodes[j + 1])) j++;
+                var gallery = document.createElement('div');
+                gallery.className = 'photo-gallery';
+                section.insertBefore(gallery, nodes[i]);
+                for (var k = i; k <= j; k++) {
+                  var imgs = nodes[k].querySelectorAll('img');
+                  for (var m = 0; m < imgs.length; m++) {
+                    gallery.appendChild(imgs[m]);
+                  }
+                }
+                for (var k = i; k <= j; k++) {
+                  if (nodes[k].parentNode) section.removeChild(nodes[k]);
+                }
+                i = j + 1;
+              } else {
+                i++;
+              }
+            }
+          }
+          hook.doneEach(function () { setTimeout(buildGallery, 0); });
+        },
+
+        /* --- 图片灯箱（自写 lightbox，无外部依赖）---
+           点击正文任意图片弹出全屏灯箱：contain 适配（高度优先撑满屏幕、宽度自动，
+           横图则宽度优先），横竖屏不同尺寸都取最大可见尺寸；支持 ← → 切换、ESC / 点遮罩关闭。
+           用 document 级事件委托，图片被相册插件移动后仍可命中。 */
+        function (hook) {
+          var overlay, imgEl, counter, items = [], idx = 0, rotation = 0;
+
+          function build() {
+            overlay = document.createElement('div');
+            overlay.className = 'lightbox-overlay';
+            imgEl = document.createElement('img');
+            imgEl.className = 'lightbox-img';
+            counter = document.createElement('div');
+            counter.className = 'lightbox-counter';
+            var closeBtn = document.createElement('span');
+            closeBtn.className = 'lightbox-close';
+            closeBtn.innerHTML = '&times;';
+            var prevBtn = document.createElement('span');
+            prevBtn.className = 'lightbox-nav lightbox-prev';
+            prevBtn.innerHTML = '&#10094;';
+            var nextBtn = document.createElement('span');
+            nextBtn.className = 'lightbox-nav lightbox-next';
+            nextBtn.innerHTML = '&#10095;';
+            var rotateBtn = document.createElement('span');
+            rotateBtn.className = 'lightbox-rotate';
+            rotateBtn.title = '旋转';
+            rotateBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><polyline points="21 3 21 9 15 9"/></svg>';
+            overlay.appendChild(imgEl);
+            overlay.appendChild(counter);
+            overlay.appendChild(closeBtn);
+            overlay.appendChild(prevBtn);
+            overlay.appendChild(nextBtn);
+            overlay.appendChild(rotateBtn);
+            document.body.appendChild(overlay);
+
+            overlay.addEventListener('click', function (e) {
+              // 点遮罩空白处或关闭按钮 → 关闭；点图片本身不关闭（下方 stopPropagation）
+              if (e.target === overlay || e.target === closeBtn) closeLb();
+            });
+            imgEl.addEventListener('click', function (e) { e.stopPropagation(); });
+            prevBtn.addEventListener('click', function (e) { e.stopPropagation(); show(idx - 1); });
+            nextBtn.addEventListener('click', function (e) { e.stopPropagation(); show(idx + 1); });
+            rotateBtn.addEventListener('click', function (e) { e.stopPropagation(); rotate(); });
+            document.addEventListener('keydown', function (e) {
+              if (overlay.style.display === 'none') return;
+              if (e.key === 'Escape') closeLb();
+              else if (e.key === 'ArrowLeft') show(idx - 1);
+              else if (e.key === 'ArrowRight') show(idx + 1);
+            });
+          }
+
+          function collect() {
+            return Array.prototype.slice.call(document.querySelectorAll('.markdown-section img'));
+          }
+
+          function openLb(src) {
+            items = collect();
+            idx = 0;
+            for (var i = 0; i < items.length; i++) {
+              if (items[i].src === src) { idx = i; break; }
+            }
+            show(idx);
+            overlay.style.display = 'flex';
+          }
+
+          function show(i) {
+            if (!items.length) return;
+            idx = (i + items.length) % items.length;
+            imgEl.src = items[idx].src;
+            rotation = 0;
+            imgEl.style.transition = '';            // 恢复静态过渡
+            if (imgEl.complete && imgEl.naturalWidth) applyGeom();
+            else imgEl.onload = applyGeom;
+            counter.textContent = (idx + 1) + ' / ' + items.length;
+          }
+
+          // contain 适配：0/180 按原比例，90/270 视觉宽高互换，均按 contain 取最大可见尺寸
+          function applyGeom() {
+            var iw = imgEl.naturalWidth, ih = imgEl.naturalHeight;
+            if (!iw || !ih) return;
+            var vw = window.innerWidth * 0.95, vh = window.innerHeight * 0.92;
+            var s = (rotation % 180 === 0)
+              ? Math.min(vw / iw, vh / ih)            // 0/180: 视觉宽=iw、高=ih
+              : Math.min(vw / ih, vh / iw);            // 90/270: 视觉宽=ih、高=iw
+            imgEl.style.maxWidth = (iw * s) + 'px';
+            imgEl.style.maxHeight = (ih * s) + 'px';
+            imgEl.style.transform = 'rotate(' + rotation + 'deg)';
+          }
+
+          // 点击旋转按钮：每次顺时针转 90 度，停在当前角度
+          function rotate() {
+            rotation = (rotation + 90) % 360;
+            applyGeom();
+          }
+
+          function closeLb() {
+            overlay.style.display = 'none';
+          }
+
+          hook.mounted(function () {
+            build();
+            // 事件委托：点击正文图片即放大，无需随页面重建
+            document.addEventListener('click', function (e) {
+              var t = e.target;
+              if (t && t.tagName === 'IMG' && t.closest('.markdown-section')) {
+                e.preventDefault();
+                openLb(t.src);
+              }
+            });
+          });
+        },
       ]
     };
   </script>
@@ -328,7 +590,7 @@
 
   <!-- ===== 官方插件 ===== -->
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>       <!-- 全文搜索 -->
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/zoom-image.min.js"></script>   <!-- 图片点击放大 -->
+  <!-- 图片点击放大改由自写 lightbox 插件负责（见 index.html 内 plugins 数组，无外部依赖） -->
 
   <!-- ===== 社区插件 ===== -->
   <script src="//cdn.jsdelivr.net/npm/docsify-pagination/dist/docsify-pagination.min.js"></script>  <!-- 上一篇/下一篇 -->
