@@ -2,6 +2,12 @@
 ![涂鸦](../../images/jelly-drawings/20261111-城堡.jpg)
 ![涂鸦](../../images/jelly-drawings/2026110501.jpg)
 ![涂鸦](../../images/jelly-drawings/2026110502.jpg)
+![涂鸦](../../images/jelly-drawings/2026112401.jpg)
+![涂鸦](../../images/jelly-drawings/2026112402.jpg)
+![涂鸦](../../images/jelly-drawings/2026112403.jpg)
+![涂鸦](../../images/jelly-drawings/2026112404.jpg)
+![涂鸦](../../images/jelly-drawings/2026112405.jpg)
+![涂鸦](../../images/jelly-drawings/2026112406.jpg)
 
 ## 2026-10
 ![涂鸦](../../images/jelly-drawings/牙齿里挖宝藏-20261023.png)
