@@ -1,8 +1,8 @@
-## 项目说明
+## 一、项目说明
 本项目使用Docsify构建，基于markdown编写笔记
 还可以使用vitepress，也是基于markdown，很多技术科技的官网都是使用该科技，比如agentscope的官网
 
-## 免费服务器记录
+## 二、免费服务器记录
 
 **Wispbyte**：一个提供完全免费容器服务的国外托管平台。虽然配置有限（1核CPU / 512MB内存 / 1G硬盘），但有显著优势：
 - **永久免费**：无需付费
@@ -29,29 +29,20 @@
 
 ---
 
-## 图床服务记录
+## 三、图床服务记录
 ### picgo
 - 官网：[https://picgo.app/](https://picgo.app/)
-
 
 ### github issues/comment
 - 用 GitHub Issue/Comment 上传图片（很多图床用这个），**不计入仓库大小**，但有单图 10MB 限制，适合 markdown 配图；
 
 ---
 
-## 新闻监控
-https://app.clueark.com/app/community
-
-## 网页内容监控
-监控感兴趣内容，有变化发送通知
-
----
-
-## 动画
+## 四、动画
 remotion
 ---
 
-## 图片压缩
+## 五、图片压缩
 https://imagecompressor.com/zh/
 ---
 
